@@ -6,24 +6,33 @@ import {
 } from '@ant-design/icons'
 import { Layout, Menu } from 'antd'
 import React from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
 const { Sider } = Layout
 
+const routes = [
+  { path: '/', label: 'Home', icon: <HomeFilled /> },
+  { path: '/dashboard', label: 'Board', icon: <DashboardFilled /> },
+]
+
 export default () => {
   const [state, setState] = React.useState({ collapsed: true })
+  const { pathname } = useLocation()
+  const selectedKey = routes.findIndex((_) => _.path === pathname)
+
   return (
     <SideLayout>
       <Sider trigger={null} collapsible collapsed={state.collapsed}>
-        <StyledMenu mode="inline" defaultSelectedKeys={['1']}>
-          <Menu.Item key="1">
-            <HomeFilled />
-            <span>Home</span>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <DashboardFilled />
-            <span>Board</span>
-          </Menu.Item>
+        <StyledMenu mode="inline" defaultSelectedKeys={[`${selectedKey}`]}>
+          {routes.map(({ icon, label, path }, i) => (
+            <Menu.Item key={`${i}`}>
+              <Link to={path}>
+                {icon}
+                <span>{label}</span>
+              </Link>
+            </Menu.Item>
+          ))}
         </StyledMenu>
       </Sider>
       {state.collapsed ? (
