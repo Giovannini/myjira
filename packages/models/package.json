@@ -1,0 +1,27 @@
+{
+  "name": "@jira/models",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Thomas Giovannini <giovannini.thomas@gmail.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "lib/*.js",
+  "types": "src/*.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "NODE_ENV=production webpack -p --config ./webpack.config.js --display-used-exports",
+    "clean": "rm -rf node_modules lib",
+    "dev": "tsc -w --project ./tsconfig.json",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "dependencies": {
+    "fp-ts": "^2.5.3",
+    "io-ts": "^2.1.2"
+  }
+}

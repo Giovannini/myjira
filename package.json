@@ -1,0 +1,51 @@
+{
+  "name": "jira",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "npx lerna run --parallel clean && rm -rf node_modules",
+    "dev": "npx lerna run dev --stream --no-sort",
+    "dev:client": "npx lerna run dev --scope @jira/client --stream --include-dependencies --no-sort",
+    "dev:server": "npx lerna run dev --scope @jira/server --stream --include-dependencies --no-sort",
+    "build": "npx lerna run --stream build",
+    "postinstall": "npx lerna bootstrap"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.9.5",
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
+    "@typescript-eslint/parser": "^2.25.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "husky": "^4.2.3",
+    "lerna": "^3.20.2",
+    "lint-staged": "^10.0.9",
+    "mocha": "^7.1.1",
+    "prettier": "^2.0.2",
+    "typescript": "^3.8.3"
+  },
+  "prettier": {
+    "semi": false,
+    "trailingComma": "es5",
+    "singleQuote": true
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.{tsx?}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "**/*.{ts,tsx,json}": [
+      "npx prettier --write",
+      "git add"
+    ]
+  }
+}

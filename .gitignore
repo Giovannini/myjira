@@ -1,0 +1,18 @@
+# NPM/Lerna build
+node_modules/
+lib/
+lerna-debug.log
+npm-debug.log
+packages/*/lib
+packages/common/models/src/*.ts
+!packages/common/models/src/index.ts
+
+# Env
+.env
+
+# Docker
+/docker/sftp/upload/
+/docker/prometheus/data
+
+# Mac
+.DS_Store
