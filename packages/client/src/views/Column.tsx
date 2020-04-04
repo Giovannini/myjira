@@ -1,21 +1,48 @@
 import React from 'react'
+import { Droppable } from 'react-beautiful-dnd'
 // import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import styled from 'styled-components'
 
-interface ColumnProps {
+import Card from './Card'
+
+interface Task {
+  id: string
   title: string
-  children: React.ReactNode
 }
 
-export default (props: ColumnProps) => (
-  <Column>
+interface Props {
+  id: string
+  index: number
+  title: string
+  tasks: (Task | undefined)[]
+}
+
+export default (props: Props) => (
+  <InternalColumn>
     <h3>{props.title}</h3>
-    {props.children}
-  </Column>
+    <Droppable droppableId={props.id} type="task">
+      {({ innerRef, placeholder }, snapshot) => (
+        <TaskList ref={innerRef} isDraggingOver={snapshot.isDraggingOver}>
+          {props.tasks.map(
+            (task, index) =>
+              task && <Card key={task.id} index={index} {...task} />
+          )}
+          {placeholder}
+        </TaskList>
+      )}
+    </Droppable>
+  </InternalColumn>
 )
 
-const Column = styled.div`
+const TaskList = styled.div`
+  transition: background-color 0.2s ease;
+  background-color: ${(props) =>
+    props.isDraggingOver ? 'skyblue' : 'inherit'};
+`
+
+const InternalColumn = styled.div`
   background: #eee;
+  width: 300px;
   margin: 8px;
   padding: 4px;
   display: flex;
