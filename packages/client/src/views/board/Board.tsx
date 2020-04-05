@@ -2,26 +2,20 @@ import React, { useState } from 'react'
 import * as dnd from 'react-beautiful-dnd'
 import styled from 'styled-components'
 
+import { ApiBoard, ApiColumn } from '@jira/models/lib/Board'
+
 import Column from './Column'
 
-interface Column {
-  id: string
-  title: string
-  tasks: string[]
+interface Props {
+  initialData: ApiBoard
 }
 
-interface State {
-  tasks: { id: string; title: string }[]
-  columns: Column[]
-  columnOrder: string[]
-}
-
-export default () => {
+export default ({ initialData }: Props) => {
   const [state, setState] = useState(initialData)
 
   const moveTaskInDifferentColumn = (
-    srceColumn: Column,
-    destColumn: Column,
+    srceColumn: ApiColumn,
+    destColumn: ApiColumn,
     sourceIndex: number,
     destinationIndex: number,
     draggableId: string
@@ -43,7 +37,7 @@ export default () => {
   }
 
   const moveTaskInSameColumn = (
-    column: Column,
+    column: ApiColumn,
     sourceIndex: number,
     destinationIndex: number,
     draggableId: string
@@ -149,21 +143,6 @@ export default () => {
       </dnd.DragDropContext>
     </div>
   )
-}
-
-const initialData: State = {
-  tasks: [
-    { id: '1', title: 'Item 1' },
-    { id: '2', title: 'Item 2' },
-    { id: '3', title: 'Item 3' },
-    { id: '4', title: 'Item 4' },
-  ],
-  columns: [
-    { id: '1', title: 'Todo', tasks: ['1', '2', '3'] },
-    { id: '2', title: 'In progress', tasks: ['4'] },
-    { id: '3', title: 'Done', tasks: [] },
-  ],
-  columnOrder: ['1', '2', '3'],
 }
 
 const InternalBoard = styled.div`

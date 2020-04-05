@@ -21,6 +21,7 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
+    "@jira/models": "0.0.0",
     "fp-ts": "^2.5.3",
     "io-ts": "^2.1.2"
   }

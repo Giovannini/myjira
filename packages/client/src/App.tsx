@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import Layout from './layout/index'
-import Board from './views/Board'
+import Board from './views/board/index'
 import 'antd/dist/antd.css'
 
 export default () => (

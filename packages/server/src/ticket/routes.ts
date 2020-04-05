@@ -21,8 +21,14 @@ export const createTicket: RequestHandler = withJsonBody(Ticket)(
 export const getTicket: RequestHandler = withQueryParams(
   t.type({ id: t.string })
 )(async ({ id }, _, res) => {
-  console.info('Creating ticket')
+  console.info(`Lookup ticket '${id}'`)
   const ticket = await ticketService.getTicket(id)
   if (ticket) res.status(200).json(ticket)
   else res.status(404).json(notFound(`ticket with id '${id}'`))
 })
+
+export const listTickets: RequestHandler = async (_, res) => {
+  console.info('Listing ticket')
+  const tickets = await ticketService.listTickets()
+  res.status(200).json(tickets)
+}
