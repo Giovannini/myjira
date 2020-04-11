@@ -1,29 +1,33 @@
 import { Ticket } from '@jira/models/lib/Ticket'
 
-import { randomStatus } from '../status/StatusService'
+import TicketRepository from './TicketRepository'
 
-export class TicketService {
-  private database: Ticket[] = Array(6)
-    .fill(0)
-    .map((_, i) => ({
-      id: `${i}`,
-      title: `Ticket ${i}`,
-      description: 'Ceci est un test',
-      status: randomStatus(),
-    }))
+export default class TicketService {
+  private repository: TicketRepository
 
-  constructor() {}
+  constructor(repository: TicketRepository) {
+    this.repository = repository
+  }
 
   getTicket(id: string): Promise<Ticket | undefined> {
-    return Promise.resolve(this.database.find((_) => _.id === id))
+    return this.repository.lookup(id)
+  }
+
+  async updateTicketStatus(id: string, newStatusId: string): Promise<boolean> {
+    const ticket = await this.getTicket(id)
+    console.log(ticket)
+    if (!!ticket) {
+      return this.repository.update(id, { ...ticket, status: newStatusId })
+    } else {
+      return Promise.resolve(false)
+    }
   }
 
   listTickets(): Promise<Ticket[]> {
-    return Promise.resolve(this.database)
+    return this.repository.list()
   }
 
-  createTicket(newTicket: Ticket): Promise<void> {
-    this.database = [...this.database, newTicket]
-    return Promise.resolve()
+  createTicket(newTicket: Omit<Ticket, 'id'>): Promise<void> {
+    return this.repository.create(newTicket)
   }
 }

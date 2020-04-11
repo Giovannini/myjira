@@ -1,25 +1,19 @@
 import { Status } from '@jira/models/lib/Status'
 
-export class StatusService {
-  private database: Status[] = status
+import StatusRepository from './StatusRepository'
 
-  constructor() {}
+export default class StatusService {
+  private repository: StatusRepository
+
+  constructor(repository: StatusRepository) {
+    this.repository = repository
+  }
 
   lookup(id: string): Promise<Status | undefined> {
-    return Promise.resolve(this.database.find((_) => _.id === id))
+    return this.repository.lookup(id)
   }
 
   list(): Promise<Status[]> {
-    return Promise.resolve(this.database)
+    return this.repository.list()
   }
 }
-
-export const randomStatus = () =>
-  status[Math.floor(Math.random() * status.length)]
-
-const status: Status[] = [
-  { id: 'A', title: 'A faire', color: '#4968A6' },
-  { id: 'B', title: 'En cours', color: '#F2C53D' },
-  { id: 'C', title: 'A valider', color: '#D9843B' },
-  { id: 'D', title: 'Terminé', color: '#14A647' },
-]

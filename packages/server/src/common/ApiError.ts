@@ -2,7 +2,7 @@ import { Response } from 'express'
 
 import * as t from 'io-ts'
 
-interface ApiError {
+export interface ApiError {
   status: number
   message?: string
   devMessage?: string

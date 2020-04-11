@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { ApiBoard, ApiColumn } from '@jira/models/lib/Board'
 
 import Column from './Column'
+import { updateTicketStatus } from './service'
 
 interface Props {
   initialData: ApiBoard
@@ -13,38 +14,59 @@ interface Props {
 export default ({ initialData }: Props) => {
   const [state, setState] = useState(initialData)
 
+  const handleTicketStatusUpdate = (
+    ticketId: string,
+    statusId: string,
+    previousState: ApiBoard
+  ) => {
+    updateTicketStatus(ticketId, statusId).then(
+      (_) => {
+        console.info(`Ticket ${ticketId} status was successfully updated.`)
+      },
+      (error) => {
+        console.warn(
+          `An error occured updating ticket '${ticketId}' status`,
+          error
+        )
+        console.info('Reverting to previous state')
+        setState(previousState)
+      }
+    )
+  }
+
   const moveTaskInDifferentColumn = (
     srceColumn: ApiColumn,
     destColumn: ApiColumn,
     sourceIndex: number,
     destinationIndex: number,
-    draggableId: string
+    ticketId: string // draggableId
   ) => {
-    const newSrcTaskIds = Array.from(srceColumn.tasks)
-    newSrcTaskIds.splice(sourceIndex, 1)
-    const newDstTaskIds = Array.from(destColumn.tasks)
-    newDstTaskIds.splice(destinationIndex, 0, draggableId)
-    setState((oldState) => ({
-      ...oldState,
-      columns: oldState.columns.map((column) => {
-        if (column.id === srceColumn.id)
-          return { ...column, tasks: newSrcTaskIds }
-        if (column.id === destColumn.id)
-          return { ...column, tasks: newDstTaskIds }
-        else return column
-      }),
-    }))
+    const updateFunction = changeTaskColumnUF(
+      srceColumn,
+      destColumn,
+      sourceIndex,
+      destinationIndex,
+      ticketId
+    )
+    setState((oldState) => {
+      handleTicketStatusUpdate(ticketId, destColumn.id, oldState)
+      return {
+        ...oldState,
+        columns: updateFunction(oldState.columns),
+      }
+    })
   }
 
   const moveTaskInSameColumn = (
     column: ApiColumn,
     sourceIndex: number,
     destinationIndex: number,
-    draggableId: string
+    ticketId: string
   ) => {
+    // Ticket order is not save in database for now
     const newTaskIds = Array.from(column.tasks)
     newTaskIds.splice(sourceIndex, 1)
-    newTaskIds.splice(destinationIndex, 0, draggableId)
+    newTaskIds.splice(destinationIndex, 0, ticketId)
     const newColumn = { ...column, tasks: newTaskIds }
     setState((oldState) => ({
       ...oldState,
@@ -148,3 +170,24 @@ export default ({ initialData }: Props) => {
 const InternalBoard = styled.div`
   display: flex;
 `
+
+const changeTaskColumnUF = (
+  srceColumn: ApiColumn,
+  destColumn: ApiColumn,
+  sourceIndex: number,
+  destinationIndex: number,
+  ticketId: string
+): ((oldColumns: ApiColumn[]) => ApiColumn[]) => {
+  const newSrcTaskIds = Array.from(srceColumn.tasks)
+  newSrcTaskIds.splice(sourceIndex, 1)
+  const newDstTaskIds = Array.from(destColumn.tasks)
+  newDstTaskIds.splice(destinationIndex, 0, ticketId)
+  return (columns) =>
+    columns.map((column) => {
+      if (column.id === srceColumn.id)
+        return { ...column, tasks: newSrcTaskIds }
+      if (column.id === destColumn.id)
+        return { ...column, tasks: newDstTaskIds }
+      else return column
+    })
+}
