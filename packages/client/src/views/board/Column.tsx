@@ -34,9 +34,12 @@ export default (props: Props) => (
   </InternalColumn>
 )
 
+interface TaskListProps {
+  isDraggingOver: boolean
+}
 const TaskList = styled.div`
   transition: background-color 0.2s ease;
-  background-color: ${(props) =>
+  background-color: ${(props: TaskListProps) =>
     props.isDraggingOver ? 'skyblue' : 'inherit'};
 `
 

@@ -9,13 +9,14 @@
     "dev:client": "npx lerna run dev --scope @jira/client --stream --include-dependencies --no-sort",
     "dev:server": "npx lerna run dev --scope @jira/server --stream --include-dependencies --no-sort",
     "build": "npx lerna run --stream build",
+    "start": "npx lerna run --stream serve --scope @jira/server",
     "postinstall": "npx lerna bootstrap"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/mocha": "^7.0.2",
-    "@types/node": "^13.9.5",
+    "@types/node": "^12.12.14",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
     "eslint": "^6.8.0",

@@ -34,11 +34,15 @@ const Title = styled.span`
   font-weight: 500;
 `
 
+interface StyledCardProps {
+  isDragging: boolean
+}
 const StyledCard = styled.div`
   width: 100%;
   padding: 8px;
   transition: background-color 0.2s ease;
-  background-color: ${(props) => (props.isDragging ? 'skyblue' : 'white')};
+  background-color: ${(props: StyledCardProps) =>
+    props.isDragging ? 'skyblue' : 'white'};
 
   &:not(:last-child) {
     margin-bottom: 8px;

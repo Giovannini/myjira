@@ -9,18 +9,18 @@ import { extract, withJsonBody, withQueryParams } from '../common/routes'
 
 export default (ticketService: TicketService) => (
   app: Express,
-  resourceName: string
+  prefixPath: string
 ) => {
-  app.get(`/${resourceName}s`, listTickets(ticketService))
-  app.get(`/${resourceName}/:id`, getTicket(ticketService))
-  app.post(`/${resourceName}/create`, createTicket(ticketService))
-  app.options('/ticket/:id/status', (req, res) => {
+  app.get(`${prefixPath}s`, listTickets(ticketService))
+  app.get(`${prefixPath}/:id`, getTicket(ticketService))
+  app.post(`${prefixPath}/create`, createTicket(ticketService))
+  app.options(`${prefixPath}/:id/status`, (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
     res.setHeader('Access-Control-Allow-Methods', 'PUT')
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
     res.status(200).end()
   })
-  app.put('/ticket/:id/status', updateTicketStatus(ticketService))
+  app.put(`${prefixPath}/:id/status`, updateTicketStatus(ticketService))
 }
 
 // TODO: ask for a ticket without id as input and send it back with generated id

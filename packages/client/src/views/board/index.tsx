@@ -6,9 +6,10 @@ import { ApiBoard } from '@jira/models/lib/Board'
 
 import { useFetch } from '../../common/hooks/useFetch'
 import Board from './Board'
+import { baseUrl } from './service'
 
 export default () => {
-  const { response, error } = useFetch('http://localhost:8080/board/1')
+  const { response, error } = useFetch(`${baseUrl}/api/board/1`)
   if (!response) {
     return <div>Loading...</div>
   }

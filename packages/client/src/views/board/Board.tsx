@@ -20,10 +20,10 @@ export default ({ initialData }: Props) => {
     previousState: ApiBoard
   ) => {
     updateTicketStatus(ticketId, statusId).then(
-      (_) => {
+      () => {
         console.info(`Ticket ${ticketId} status was successfully updated.`)
       },
-      (error) => {
+      (error: unknown) => {
         console.warn(
           `An error occured updating ticket '${ticketId}' status`,
           error
