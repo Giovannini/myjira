@@ -4,6 +4,7 @@ import { Droppable } from 'react-beautiful-dnd'
 import styled from 'styled-components'
 
 import Card from './Card'
+import * as colors from '../../common/primitives/colors'
 
 interface Task {
   id: string
@@ -28,11 +29,28 @@ export default (props: Props) => (
               task && <Card key={task.id} index={index} {...task} />
           )}
           {placeholder}
+          {placeholder && snapshot.isDraggingOver && (
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                border: `3px dashed ${colors.primary}`,
+                borderRadius: 5,
+              }}
+            />
+          )}
         </TaskList>
       )}
     </Droppable>
   </InternalColumn>
 )
+
+const Title = styled.h3`
+  font-size: 16px;
+`
 
 interface TaskListProps {
   isDraggingOver: boolean
@@ -40,10 +58,11 @@ interface TaskListProps {
 const TaskList = styled.div`
   transition: background-color 0.2s ease;
   background-color: ${(props: TaskListProps) =>
-    props.isDraggingOver ? 'skyblue' : 'inherit'};
+    props.isDraggingOver ? `${colors.secondary}88` : 'inherit'};
 `
 
 const InternalColumn = styled.div`
+  position: relative;
   background: #eee;
   width: 300px;
   margin: 8px;

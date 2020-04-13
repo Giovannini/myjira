@@ -1,13 +1,15 @@
 import {
   DashboardFilled,
   HomeFilled,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
+  CaretLeftOutlined,
+  CaretRightOutlined,
 } from '@ant-design/icons'
 import { Layout, Menu } from 'antd'
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
+
+import * as colors from '../common/primitives/colors'
 
 const { Sider } = Layout
 
@@ -23,7 +25,7 @@ export default () => {
 
   return (
     <SideLayout>
-      <Sider trigger={null} collapsible collapsed={state.collapsed}>
+      <StyledSider trigger={null} collapsible collapsed={state.collapsed}>
         <StyledMenu mode="inline" defaultSelectedKeys={[`${selectedKey}`]}>
           {routes.map(({ icon, label, path }, i) => (
             <Menu.Item key={`${i}`}>
@@ -34,25 +36,46 @@ export default () => {
             </Menu.Item>
           ))}
         </StyledMenu>
-      </Sider>
-      {state.collapsed ? (
-        <MenuUnfoldOutlined
-          className="trigger"
-          onClick={() => setState({ collapsed: !state.collapsed })}
-        />
-      ) : (
-        <MenuFoldOutlined
-          className="trigger"
-          onClick={() => setState({ collapsed: !state.collapsed })}
-        />
-      )}
+      </StyledSider>
+      <ExpandButtonContainer>
+        {state.collapsed ? (
+          <CaretRightOutlined
+            style={{ fontSize: '30px', color: colors.primary }}
+            onClick={() => setState({ collapsed: !state.collapsed })}
+          />
+        ) : (
+          <CaretLeftOutlined
+            style={{ fontSize: '30px', color: colors.primary }}
+            onClick={() => setState({ collapsed: !state.collapsed })}
+          />
+        )}
+      </ExpandButtonContainer>
     </SideLayout>
   )
 }
 
+const ExpandButtonContainer = styled.div`
+  background: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -20px;
+  z-index: 1;
+`
+
 const SideLayout = styled(Layout)`
+  display: flex;
+  align-items: center;
   height: 100%;
   position: fixed;
+  background: transparent;
+`
+
+const StyledSider = styled(Sider)`
+  height: 100%;
 `
 
 const StyledMenu = styled(Menu)`

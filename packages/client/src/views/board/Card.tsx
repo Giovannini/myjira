@@ -3,6 +3,8 @@ import React from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import styled from 'styled-components'
 
+import * as colors from '../../common/primitives/colors'
+
 interface Props {
   id: string
   index: number
@@ -40,9 +42,11 @@ interface StyledCardProps {
 const StyledCard = styled.div`
   width: 100%;
   padding: 8px;
-  transition: background-color 0.2s ease;
-  background-color: ${(props: StyledCardProps) =>
-    props.isDragging ? 'skyblue' : 'white'};
+  transition: border-color 0.2s ease;
+  background-color: white;
+  border: 3px solid transparent;
+  border-color: ${(props: StyledCardProps) =>
+    props.isDragging ? colors.secondary : 'transparent'};
 
   &:not(:last-child) {
     margin-bottom: 8px;

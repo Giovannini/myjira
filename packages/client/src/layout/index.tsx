@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import Header from './Header'
 import Side from './Side'
 
+import * as colors from '../common/primitives/colors'
+
 const { Content } = Layout
 
 interface Props {
@@ -16,10 +18,14 @@ export default (props: Props) => (
     <Header />
     <Layout>
       <Side />
-      <Layout style={{ padding: '0 24px 24px', marginLeft: '80px' }}>
-        <AppContent className="site-layout-background">
-          {props.children}
-        </AppContent>
+      <Layout
+        style={{
+          padding: '0 24px 24px',
+          marginLeft: '80px',
+          background: `${colors.secondary}44`,
+        }}
+      >
+        <AppContent>{props.children}</AppContent>
       </Layout>
     </Layout>
   </AppLayout>

@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { ApiBoard, ApiColumn } from '@jira/models/lib/Board'
 
 import Column from './Column'
+import easterBunny from './easter_bunny.svg'
 import { updateTicketStatus } from './service'
 
 interface Props {
@@ -77,20 +78,6 @@ export default ({ initialData }: Props) => {
     }))
   }
 
-  const moveColumn = (
-    sourceIndex: number,
-    destinationIndex: number,
-    draggableId: string
-  ) => {
-    const newColumnOrder = Array.from(state.columnOrder)
-    newColumnOrder.splice(sourceIndex, 1)
-    newColumnOrder.splice(destinationIndex, 0, draggableId)
-    setState((oldState) => ({
-      ...oldState,
-      columnOrder: newColumnOrder,
-    }))
-  }
-
   const onDragEnd = (result: dnd.DropResult) => {
     const { destination, source, draggableId, type } = result
     if (!destination) {
@@ -102,11 +89,6 @@ export default ({ initialData }: Props) => {
     ) {
       return
     }
-
-    // if (type === 'column') {
-    //   moveColumn(source.index, destination.index, draggableId)
-    //   return
-    // }
 
     if (type === 'task') {
       const srceColumn = state.columns.find((_) => _.id === source.droppableId)
@@ -141,34 +123,45 @@ export default ({ initialData }: Props) => {
   }
 
   return (
-    <div>
-      <dnd.DragDropContext onDragEnd={onDragEnd}>
-        <InternalBoard>
-          {state.columnOrder.map((id, index) => {
-            const column = state.columns.find((_) => _.id === id)
-            const tasks =
-              column?.tasks?.map((id) =>
-                state.tasks.find((_) => _.id === id)
-              ) || []
-            return (
-              column && (
-                <Column
-                  {...column}
-                  key={column.id}
-                  index={index}
-                  tasks={tasks}
-                />
+    <>
+      <div>
+        <dnd.DragDropContext onDragEnd={onDragEnd}>
+          <InternalBoard>
+            {state.columnOrder.map((id, index) => {
+              const column = state.columns.find((_) => _.id === id)
+              const tasks =
+                column?.tasks?.map((id) =>
+                  state.tasks.find((_) => _.id === id)
+                ) || []
+              return (
+                column && (
+                  <Column
+                    {...column}
+                    key={column.id}
+                    index={index}
+                    tasks={tasks}
+                  />
+                )
               )
-            )
-          })}
-        </InternalBoard>
-      </dnd.DragDropContext>
-    </div>
+            })}
+          </InternalBoard>
+        </dnd.DragDropContext>
+      </div>
+      <FunnyImage src={easterBunny} alt="logo" />
+    </>
   )
 }
 
+const FunnyImage = styled.img`
+  height: 150px;
+  bottom: 50px;
+  right: 50px;
+  position: absolute;
+`
+
 const InternalBoard = styled.div`
   display: flex;
+  width: min-content;
 `
 
 const changeTaskColumnUF = (
